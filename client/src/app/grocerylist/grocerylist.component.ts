@@ -16,8 +16,21 @@ export class GroceryListComponent implements OnInit {
 	}
 
 	ngOnInit(){
+
+		this.getAllGrocery()
+
 		this.commonService.add_subject.subscribe(response => {
-			this.groceryList = this.commonService.groceryList
+			this.getAllGrocery()
+		})
+
+	}
+
+	getAllGrocery(){
+		this.commonService.getGrocery().subscribe(res =>{
+			this.groceryList  = []
+			res.json().data.map(e => {
+				this.groceryList.push(new Grocery(e.item,false));
+			})
 		})
 	}
 
