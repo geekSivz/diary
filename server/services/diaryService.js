@@ -1,31 +1,31 @@
 const Mongodb = require('mongodb').MongoClient;
 const assert = require('assert');
-const dbName = 'groceryDb';
+const dbName = 'diaryDb';
 const url = 'mongodb://localhost:27017/' + dbName;
 
-class GroceryService{
+class DiaryService{
 	
 	constructor(req, res){
 		this.req = req
 		this.res = res
 	}
 
-	insert(groceryItem, db, callback){
-		db.collection('grocery').insertOne({
-		  		"item" : groceryItem
+	insert(diaryItem, db, callback){
+		db.collection('diary').insertOne({
+		  		"item" : diaryItem
 		}, function(){
 			callback()		
 		})
 	}
 
-	addGrocery(){
+	addDiary(){
 		let self = this;
-		let groceryItem = this.req.body.groceryItem;
+		let diaryItem = this.req.body.diaryItem;
 		try{
 			Mongodb.connect(url, { useNewUrlParser: true },  function(err, client) {
 				assert.equal(null, err);
 				let db = client.db(dbName);
-			  	self.insert(groceryItem, db, function(){
+			  	self.insert(diaryItem, db, function(){
 					client.close()
 			  		return self.res.status(200).json({
 						status: 'success'
@@ -40,23 +40,23 @@ class GroceryService{
 			})
 		}
 	}
-	getGrocery(){
+	getDiary(){
 		let self = this;
 		try{
 			Mongodb.connect(url, { useNewUrlParser: true }, function(err, client) {
 				let db = client.db(dbName);
 				assert.equal(null, err);
-			  	let groceryList = []
-			  	let cursor = db.collection('grocery').find();
+			  	let diaryList = []
+			  	let cursor = db.collection('diary').find();
 
 			   	cursor.each(function(err, doc) {
 			      assert.equal(err, null);
 			      if (doc != null) {
-			        groceryList.push(doc)
+			        diaryList.push(doc)
 			      } else {
 			        return self.res.status(200).json({
 						status: 'success',
-						data: groceryList
+						data: diaryList
 					})
 			      }
 			   	});
@@ -71,4 +71,4 @@ class GroceryService{
 		}
 	}
 }
-module.exports = GroceryService
+module.exports = DiaryService

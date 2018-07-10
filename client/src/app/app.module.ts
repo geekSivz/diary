@@ -4,15 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { GroceryAddComponent } from './groceryadd/groceryadd.component'
-import { GroceryListComponent } from './grocerylist/grocerylist.component'
+import { DiaryAddComponent } from './diaryadd/diaryadd.component'
+import { DiaryListComponent } from './diarylist/diarylist.component'
 import { CommonService } from './common/common.service'
 
 @NgModule({
   declarations: [
     AppComponent,
-    GroceryAddComponent,
-    GroceryListComponent
+    DiaryAddComponent,
+    DiaryListComponent
   ],
   imports: [
     BrowserModule,
