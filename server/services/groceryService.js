@@ -1,4 +1,4 @@
-const Mongodb = require('mongodb').Mongodb;
+const Mongodb = require('mongodb').MongoClient;
 const assert = require('assert');
 const dbName = 'groceryDb';
 const url = 'mongodb://localhost:27017/' + dbName;
@@ -11,7 +11,6 @@ class GroceryService{
 	}
 
 	insert(groceryItem, db, callback){
-		let db = db.db(dbName);
 		db.collection('grocery').insertOne({
 		  		"item" : groceryItem
 		}, function(){
@@ -23,11 +22,11 @@ class GroceryService{
 		let self = this;
 		let groceryItem = this.req.body.groceryItem;
 		try{
-			Mongodb.connect(url, { useNewUrlParser: true },  function(err, db) {
+			Mongodb.connect(url, { useNewUrlParser: true },  function(err, client) {
 				assert.equal(null, err);
-				let db = db.db(dbName);
+				let db = client.db(dbName);
 			  	self.insert(groceryItem, db, function(){
-			  		db.close()
+					client.close()
 			  		return self.res.status(200).json({
 						status: 'success'
 					})
@@ -44,8 +43,8 @@ class GroceryService{
 	getGrocery(){
 		let self = this;
 		try{
-			Mongodb.connect(url, { useNewUrlParser: true }, function(err, db) {
-				let db = db.db(dbName);
+			Mongodb.connect(url, { useNewUrlParser: true }, function(err, client) {
+				let db = client.db(dbName);
 				assert.equal(null, err);
 			  	let groceryList = []
 			  	let cursor = db.collection('grocery').find();
@@ -64,6 +63,7 @@ class GroceryService{
 			});
 		}
 		catch(error){
+			console.log(error);
 			return self.res.status(500).json({
 				status: 'error',
 				error: error
