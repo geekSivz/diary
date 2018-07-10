@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { DiaryAddComponent } from './diaryadd/diaryadd.component'
 import { DiaryListComponent } from './diarylist/diarylist.component'
 import { CommonService } from './common/common.service'
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
 
 @NgModule({
   declarations: [
@@ -17,8 +18,10 @@ import { CommonService } from './common/common.service'
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    MDBBootstrapModule.forRoot()
   ],
+  schemas: [  ],
   providers: [CommonService],
   bootstrap: [AppComponent]
 })

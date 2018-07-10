@@ -21,13 +21,17 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "src/styles.css",
-              "src/assets/bootstrap.min.css"
+              "src/styles.scss",
+              "node_modules/font-awesome/scss/font-awesome.scss",
+              "node_modules/bootstrap/scss/bootstrap.scss",
+              "node_modules/angular-bootstrap-md/scss/mdb-free.scss"
             ],
             "scripts": [
               "src/assets/jquery.min.js",
               "src/assets/popper.min.js",
-              "src/assets/bootstrap.min.js"
+              "src/assets/bootstrap.min.js",
+              "node_modules/chart.js/dist/Chart.js",
+              "node_modules/hammerjs/hammer.min.js"
             ]
           },
           "configurations": {
@@ -149,7 +153,7 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-      "styleext": "css"
+      "styleext": "scss"
     },
     "@schematics/angular:directive": {
       "prefix": "app"
