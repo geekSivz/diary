@@ -17,27 +17,29 @@
         <div class="modal-body mb-0">
           <form [formGroup]="modalForm">
             <div class="md-form form-sm">
-              <i class="fa fa-envelope prefix"></i>
-              <input mdbInputDirective type="text" id="modalFormNameEx" formControlName="modalFormNameEx" class="form-control" [(ngModel)]="diaryItem" >
-              <label for="modalFormNameEx">Your name</label>
+              <input mdbInputDirective type="text" id="activity-titile" formControlName="activity-titile" class="form-control" [(ngModel)]="activityTitle" >
+              <label for="activity-titile">Activity Title</label>
             </div>
   
             <div class="md-form form-sm">
-              <i class="fa fa-lock prefix"></i>
-              <input mdbInputDirective type="email" id="modalFormEmailEx" formControlName="modalFormEmailEx" class="form-control">
-              <label for="modalFormEmailEx">Your email</label>
+              
+              <select class="form-control mdb-select colorful-select dropdown-primary"  id="activity-category" formControlName="activity-category">
+                <option value="" disabled selected>Choose your option</option>
+                <option value="1">Travel</option>
+                <option value="2">Dining</option>
+                <option value="3">Life Style</option>
+              </select>
+              <label for="activity-category">Category</label>
+            </div>
+
+            <div class="md-form form-sm">
+              <input mdbInputDirective type="file" id="activity-snap" formControlName="activity-snap" class="form-control">
+              <label for="activity-snap">Choose a Snap</label>
             </div>
   
             <div class="md-form form-sm">
-              <i class="fa fa-tag prefix"></i>
-              <input mdbInputDirective type="text" id="modalFormSubjectEx" formControlName="modalFormSubjectEx" class="form-control">
-              <label for="modalFormSubjectEx">Subject</label>
-            </div>
-  
-            <div class="md-form form-sm">
-              <i class="fa fa-pencil prefix"></i>
-              <textarea mdbInputDirective type="text" id="modalFormTextEx" formControlName="modalFormTextEx" class="md-textarea mb-0"></textarea>
-              <label for="modalFormTextEx">Your message</label>
+              <textarea mdbInputDirective type="text" id="activity-description" formControlName="activity-description" class="md-textarea mb-0"></textarea>
+              <label for="activity-description">Description</label>
             </div>
   
             <div class="text-center mt-1-half">
