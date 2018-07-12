@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
@@ -13,7 +14,8 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
   declarations: [
     AppComponent,
     DiaryAddComponent,
-    DiaryListComponent
+    DiaryListComponent,
+    FileSelectDirective
   ],
   imports: [
     BrowserModule,
