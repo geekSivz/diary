@@ -1,127 +1,184 @@
-let express = require('express'); 
-let app = express(); 
-let bodyParser = require('body-parser');
-let mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/files');
-let conn = mongoose.connection;
-let multer = require('multer');
-let GridFsStorage = require('multer-gridfs-storage');
-let Grid = require('gridfs-stream');
-Grid.mongo = mongoose.mongo;
-let gfs = Grid(conn.db);
+var express = require('express');
+var multer = require('multer');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var gridfs = require('gridfs-stream');
+var fs = require('fs');
+var app = express();
+var url = require('url');
 let port = 3000;
 
-const diaryService  = require('./services/diaryService')
+const diaryService = require('./services/diaryService')
 
-// Setting up the root route
-app.get('/', (req, res) => {
-    res.send('Welcome to the express server');
-});
+app.use(bodyParser.json());
 
+/*
 // Allows cross-origin domains to access this API
 app.use((req, res, next) => {
-    res.append('Access-Control-Allow-Origin' , 'http://localhost:4200');
+    res.append('Access-Control-Allow-Origin', 'http://localhost:4200');
     res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.append("Access-Control-Allow-Headers", "Origin, Accept,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
     res.append('Access-Control-Allow-Credentials', true);
     next();
 });
 
-// BodyParser middleware
-app.use(bodyParser.json());
-
-// Setting up the storage element
-let storage = GridFsStorage({
-    gfs : gfs,
-
-    filename: (req, file, cb) => {
-        let date = Date.now();
-        // The way you want to store your file in database
-        cb(null, file.fieldname + '-' + date + '.'); 
-    },
-    
-    // Additional Meta-data that you want to store
-    metadata: function(req, file, cb) {
-        cb(null, { originalname: file.originalname });
-    },
-    root: 'ctFiles' // Root collection name
-});
-
-// Multer configuration for single file uploads
-let upload = multer({
-    storage: storage
-}).single('file');
-
-// Route for file upload
-app.post('/upload', (req, res) => {
-    upload(req,res, (err) => {
-        if(err){
-             res.json({error_code:1,err_desc:err});
-             return;
-        }
-        res.json({error_code:0, error_desc: null, file_uploaded: true});
-    });
-});
-
-// Downloading a single file
-app.get('/file/:filename', (req, res) => {
-    gfs.collection('ctFiles'); //set collection name to lookup into
-
-    /** First check if file exists */
-    gfs.files.find({filename: req.params.filename}).toArray(function(err, files){
-        if(!files || files.length === 0){
-            return res.status(404).json({
-                responseCode: 1,
-                responseMessage: "error"
-            });
-        }
-        // create read stream
-        var readstream = gfs.createReadStream({
-            filename: files[0].filename,
-            root: "ctFiles"
-        });
-        // set the proper content type 
-        res.set('Content-Type', files[0].contentType)
-        // Return response
-        return readstream.pipe(res);
-    });
-});
-
-// Route for getting all the files
-app.get('/files', (req, res) => {
-    let filesData = [];
-    let count = 0;
-    gfs.collection('ctFiles'); // set the collection to look up into
-
-    gfs.files.find({}).toArray((err, files) => {
-        // Error checking
-        if(!files || files.length === 0){
-            return res.status(404).json({
-                responseCode: 1,
-                responseMessage: "error"
-            });
-        }
-        // Loop through all the files and fetch the necessary information
-        files.forEach((file) => {
-            filesData[count++] = {
-                originalname: file.metadata.originalname,
-                filename: file.filename,
-                contentType: file.contentType
-            }
-        });
-        res.json(filesData);
-    });
-});
- 
 app.post('/api/addDiary', function (req, res) {
-  let diaryServiceObj = new diaryService(req, res)
-  diaryServiceObj.addDiary()
+    let diaryServiceObj = new diaryService(req, res)
+    diaryServiceObj.addDiary()
 })
 
 app.post('/api/getDiary', function (req, res) {
-  let diaryServiceObj = new diaryService(req, res)
-  diaryServiceObj.getDiary()
-})
+    let diaryServiceObj = new diaryService(req, res)
+    diaryServiceObj.getDiary()
+})*/
+
+/*
+	Make a MongoDB connection
+*/
+mongoose.connect('mongodb://localhost:27017/diary')
+mongoose.Promise = global.Promise;
+
+gridfs.mongo = mongoose.mongo;
+/*
+	Check MongoDB connection
+*/
+var connection = mongoose.connection;
+connection.on('error', console.error.bind(console, 'connection error:'));
+
+connection.once('open', () => {
+var gfs = gridfs(connection.db);
+    
+
+    app.get('/', (req, res) => {
+        res.send('Download/Upload GridFS files to MongoDB <br>- by JavaSampleApproach.com');
+    });
+
+	
+	
+  	// Upload a file from loca file-system to MongoDB
+    app.get('/api/file/upload', (req, res) => {
+		
+		var files = req.query.filename.split(',');
+		
+		for(i=0;i<files.length;i++){
+			var writestream = gfs.createWriteStream({ filename: files[i] });
+			fs.createReadStream(__dirname + "/uploads/" + files[i]).pipe(writestream);
+		}
+        writestream.on('close', (file) => {
+		   // res.send('Stored File: ' + file.filename);
+		   res.redirect('/');
+        });
+    });
+	
+	app.post('/api/file/upload', (req, res) => {
+		
+		var files = req.query.filename.split(',');
+		console.log('post');
+		for(i=0;i<files.length;i++){
+			var writestream = gfs.createWriteStream({ filename: files[i] });
+			fs.createReadStream(__dirname + "/uploads/" + files[i]).pipe(writestream);
+		}
+        writestream.on('close', (file) => {
+		   // res.send('Stored File: ' + file.filename);
+		   res.redirect('/');
+        });
+    });
+
+    // Download a file from MongoDB - then save to local file-system
+    app.get('/api/file/download', (req, res) => {
+        // Check file exist on MongoDB
+		
+		var filename = req.query.filename;
+		
+        gfs.exist({ filename: filename }, (err, file) => {
+            if (err || !file) {
+                res.status(404).send('File Not Found');
+				return
+            } 
+			
+			var readstream = gfs.createReadStream({ filename: filename });
+			readstream.pipe(res);            
+        });
+    });
+
+    // Delete a file from MongoDB
+    app.get('/api/file/delete', (req, res) => {
+		
+		var filename = req.query.filename;
+		
+		gfs.exist({ filename: filename }, (err, file) => {
+			if (err || !file) {
+				res.status(404).send('File Not Found');
+				return;
+			}
+			
+			gfs.remove({ filename: filename }, (err) => {
+				if (err) res.status(500).send(err);
+				res.send('File Deleted');
+			});
+		});
+    });
+
+    // Get file information(File Meta Data) from MongoDB
+	app.get('/api/file/meta', (req, res) => {
+		
+		var filename = req.query.filename;
+		
+		gfs.exist({ filename: filename }, (err, file) => {
+			if (err || !file) {
+				res.send('File Not Found');
+				return;
+			}
+			
+			gfs.files.find({ filename: filename }).toArray( (err, files) => {
+				if (err) res.send(err);
+				res.json(files);
+			});
+		});
+	});
+
+    var server = app.listen(3001, () => {
+		
+	  var host = server.address().address
+	  var port = server.address().port
+	 
+	  console.log("App listening at http://%s:%s", host, port); 
+	});
+
+});
+
+
+var Storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, "./uploads");
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
+    }
+});
+
+var upload = multer({ storage: Storage }).array("snap", 3); //Field name and max count
+
+app.get("/", function (req, res) {
+    res.sendFile(__dirname + "/index.html");
+});
+
+app.post("/api/FormUpload", function (req, res, uploadToDB) {
+    upload(req, res, function (err) {
+        if (err) {
+            return res.end("Something went wrong!");
+		}
+		var files = req.files.map(function(val) {
+			return val.filename;
+		  }).join(',');		
+		res.redirect(307, url.format({
+			pathname:"/api/file/upload",
+			query: {
+				"filename": files
+			}
+		}));
+    });
+});
 
 app.listen(port, (req, res) => {
     console.log('Diary Web app service listening on port' + port);

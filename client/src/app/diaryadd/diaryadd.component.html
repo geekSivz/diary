@@ -23,7 +23,7 @@
   
             <div class="md-form form-sm">
               
-              <select class="form-control mdb-select colorful-select dropdown-primary"  id="activity-category" formControlName="activity-category">
+              <select class="form-control mdb-select colorful-select dropdown-primary"  id="activity-category" formControlName="activity-category" [(ngModel)]="activityCategory">
                 <option value="" disabled selected>Choose your option</option>
                 <option value="1">Travel</option>
                 <option value="2">Dining</option>
@@ -33,12 +33,12 @@
             </div>
 
             <div class="md-form form-sm">
-              <input mdbInputDirective type="file" id="activity-snap" formControlName="activity-snap" class="form-control">
+              <input mdbInputDirective type="file" id="activity-snap" formControlName="activity-snap" class="form-control" multiple [(ngModel)]="activitySnap">
               <label for="activity-snap">Choose a Snap</label>
             </div>
   
             <div class="md-form form-sm">
-              <textarea mdbInputDirective type="text" id="activity-description" formControlName="activity-description" class="md-textarea mb-0"></textarea>
+              <textarea mdbInputDirective type="text" id="activity-description" formControlName="activity-description" class="md-textarea mb-0" [(ngModel)]="activityDescription"></textarea>
               <label for="activity-description">Description</label>
             </div>
   
