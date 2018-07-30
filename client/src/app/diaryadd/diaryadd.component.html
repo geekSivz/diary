@@ -1,57 +1,78 @@
-  <!--Modal: Activity form-->
-  <div mdbModal #form="mdb-modal" class="modal fade" id="modalContactForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog cascading-modal" role="document">
-      <!--Content-->
-      <div class="modal-content">
-  
-        <!--Header-->
-        <div class="modal-header light-blue darken-3 white-text">
-          <h4 class="title">
-            <i class="fa fa-pencil"></i> Write your activities</h4>
-          <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close" (click)="form.hide()">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <!--Body-->
-        <div class="modal-body mb-0">
-          <form [formGroup]="modalForm">
-            <div class="md-form form-sm">
-              <input mdbInputDirective type="text" id="activity-titile" formControlName="activity-titile" class="form-control" [(ngModel)]="activityTitle" >
-              <label for="activity-titile">Activity Title</label>
-            </div>
-  
-            <div class="md-form form-sm">
-              
-              <select class="form-control mdb-select colorful-select dropdown-primary"  id="activity-category" formControlName="activity-category" [(ngModel)]="activityCategory">
-                <option value="" disabled selected>Choose your option</option>
-                <option value="1">Travel</option>
-                <option value="2">Dining</option>
-                <option value="3">Life Style</option>
-              </select>
-              <label for="activity-category">Category</label>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <!--<form id="frmUploader" [formGroup]="myform" enctype="multipart/form-data" method="post" (ngSubmit)="onSubmit()" novalidate>
+                <input type="file" name="snap" multiple />
+                <input type="submit" name="submit" id="btnSubmit" value="Upload" />
+            </form>-->
+            <form novalidate [formGroup]="myform" (ngSubmit)="onSubmit()">
+
+            <div class="form-group" [ngClass]="{
+                    'has-danger': Title.invalid && (Title.dirty || Title.touched),
+                    'has-success': Title.valid && (Title.dirty || Title.touched)
+                }">
+                <label>Title</label>
+                <input type="text" class="form-control" formControlName="Title" required>
+                <div class="form-control-feedback"
+                    *ngIf="Title.errors && (Title.dirty || Title.touched)">
+                <p *ngIf="Title.errors.required">Title is required</p>
+                </div>
+
+                <!--
+                <pre>Valid? {{ myform.controls.email.valid }}</pre>
+                <pre>Dirty? {{ myform.controls.email.dirty }}</pre>
+                -->
+
             </div>
 
-            <div class="md-form form-sm">
-              <input mdbInputDirective type="file" id="activity-snap" formControlName="activity-snap" class="form-control" multiple [(ngModel)]="activitySnap">
-              <label for="activity-snap">Choose a Snap</label>
+            <div class="form-group" [ngClass]="{
+                    'has-danger': ActivityType.invalid && (ActivityType.dirty || ActivityType.touched),
+                    'has-success': ActivityType.valid && (ActivityType.dirty || ActivityType.touched)
+            }">
+                <label>ActivityType</label>
+                <select class="form-control" formControlName="ActivityType">
+                    <option value="">Please select a ActivityType</option>
+                    <option *ngFor="let type of aType" [value]="type">{{type}}</option>
+                </select>
+                <div class="form-control-feedback" *ngIf="ActivityType.errors && (ActivityType.dirty || ActivityType.touched)">
+                <p *ngIf="ActivityType.errors.required">ActivityType is required</p>
+                </div>
+
+                <!--
+                <pre>Valid? {{ myform.controls.file.valid }}</pre>
+                <pre>Dirty? {{ myform.controls.file.dirty }}</pre>
+                -->
+
             </div>
-  
-            <div class="md-form form-sm">
-              <textarea mdbInputDirective type="text" id="activity-description" formControlName="activity-description" class="md-textarea mb-0" [(ngModel)]="activityDescription"></textarea>
-              <label for="activity-description">Description</label>
+
+            <div class="form-group" [ngClass]="{
+                    'has-danger': FileNames.invalid && (FileNames.dirty || FileNames.touched),
+                    'has-success': FileNames.valid && (FileNames.dirty || FileNames.touched)
+            }">
+                <label>Snap</label>
+                <input type="file" class="form-control" formControlName="FileNames" multiple  required (change)="getFileDetails($event)">
+                <div class="form-control-feedback" *ngIf="FileNames.errors && (FileNames.dirty || FileNames.touched)">
+                <p *ngIf="FileNames.errors.required">Snap is required</p>
+                </div>
             </div>
-  
-            <div class="text-center mt-1-half">
-              <button class="btn btn-info mb-2 waves-light" mdbWavesEffect (click)="addDiary()">Add
-                <i class="fa fa-send ml-1"></i>
-              </button>
+
+            <!--
+                <pre>{{ language.errors | json }}</pre>
+            -->
+
+            <div class="form-group"  [ngClass]="{
+                    'has-danger': Description.invalid && (Description.dirty || Description.touched),
+                    'has-success': Description.valid && (Description.dirty || Description.touched)
+                }">
+                <label>Description</label>
+                 <textarea class="form-control" formControlName="Description" required></textarea>
             </div>
-          </form>
-  
+
+            <button type="submit" class="btn btn-primary">Add</button>
+
+            <pre>{{myform.value | json}}</pre>
+            </form>
         </div>
-      </div>
-      <!--/.Content-->
-    </div>
   </div>
-  <!--Modal: Activity form-->
+ 
+  </div>

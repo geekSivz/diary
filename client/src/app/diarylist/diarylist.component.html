@@ -349,23 +349,3 @@
 </section>
 <!--/Section: Magazine v.1-->
 </div>
-
-<div class="listContainer">
-  <ul class="list-group" *ngFor="let item of diaryList">
-    <li class="list-group-item">{{item.Name}}</li>
-   
-  </ul>
-</div>
-
-<hr>
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <form id="frmUploader" enctype="multipart/form-data" action="api/FormUpload/" method="post" (ngSubmit)="onSubmit()" >
-                <input type="file" name="snap" multiple />
-                <input type="submit" name="submit" id="btnSubmit" value="Upload" />
-            </form>
-        </div>
-  </div>
- 
-  </div>

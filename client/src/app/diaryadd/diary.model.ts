@@ -1,6 +1,8 @@
 export class Diary {
 	constructor(
-		public Name: String,
-		public IsDone: Boolean
+		public Title: String,
+		public ActivityType: String,
+		public Description: String,
+		public FileNames: String
 	) { }
 }

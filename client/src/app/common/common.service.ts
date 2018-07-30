@@ -14,9 +14,10 @@ export class CommonService {
 	}
 
 	addDiary(item){
-		return this.http.post('/api/addDiary',{
+		console.log(item);
+		/*return this.http.post('/api/addDiary',{
 			diaryItem : item
-		})
+		})*/
 	}
 
 	getDiary(){

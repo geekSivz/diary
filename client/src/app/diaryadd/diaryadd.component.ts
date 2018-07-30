@@ -1,8 +1,8 @@
 
-import { Component, OnInit } from '@angular/core';
 import { Diary } from './diary.model'
+import { Component, OnInit, Compiler } from '@angular/core';
+import { ReactiveFormsModule, FormsModule, FormGroup, FormControl, Validators,FormBuilder } from '@angular/forms';
 import { CommonService } from '../common/common.service'
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
     selector: 'diary-add',
@@ -12,30 +12,85 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class DiaryAddComponent implements OnInit {
 
-    private diaryItem;
+    private diaryList: Diary[]
+	aType: string[] = [
+    'Hotel',
+    'Dining',
+    'Shopping',
+  ];
+  myform: FormGroup;
+  Title: FormControl;
+  ActivityType: FormControl;
+  Description: FormControl;
+	FileNames: FormControl;
+	myFiles:string [] = [];
 
-    modalForm: FormGroup;
+	constructor(private commonService: CommonService, private _compiler: Compiler) {
 
-    constructor(private commonService:CommonService, public fb: FormBuilder) {
-        this.modalForm = fb.group({
-            modalFormNameEx: ['', Validators.required],
-            modalFormEmailEx: ['', [Validators.email, Validators.required]],
-            modalFormSubjectEx: ['', Validators.required],
-            modalFormTextEx: ['', Validators.required]
-          });
-      
+	}
+
+	ngOnInit() {
+
+		this.getAllDiary();
+		this.createFormControls();
+    this.createForm();
+		this._compiler.clearCache();
+
+		this.commonService.add_subject.subscribe(response => {
+			this.getAllDiary()
+		})
+
+	}
+	
+  createFormControls() {
+    this.Title = new FormControl('', Validators.required);
+    /*this.email = new FormControl('', [
+      Validators.required,
+      Validators.pattern("[^ @]*@[^ @]*")
+    ]);*/
+    this.ActivityType = new FormControl('', [
+      Validators.required,
+    ]);		
+		this.FileNames = new FormControl('', [
+      Validators.required
+    ]);
+    this.Description = new FormControl('');
+  }
+
+	getFileDetails (e) {
+    //console.log (e.target.files);
+    for (var i = 0; i < e.target.files.length; i++) { 
+      this.myFiles.push(e.target.files[i]);
     }
+		console.log(this.myFiles);
+  }
 
-    addDiary(){
-        this.commonService.addDiary(this.diaryItem).subscribe(res => {
-            this.commonService.add_subject.next()
-        })
+  createForm() {
+    this.myform = new FormGroup({
+      Title: this.Title,
+			ActivityType: this.ActivityType,
+      FileNames: this.FileNames,
+      Description: this.Description
+    });
+  }
 
-        this.diaryItem = ''
+  onSubmit() {
+    if (this.myform.valid) {
+      console.log("Form Submitted!");
+			this.commonService.addDiary(this.myform.value);
+      this.myform.reset();
     }
+  }
 
-    ngOnInit() {
 
-    }
+	getAllDiary() {
+		this.commonService.getDiary().subscribe(res => {
+			this.diaryList = []
+			res.json().data.map(e => {
+				this.diaryList.push(new Diary(e.Title,e.ActivityType,e.FileNames,e.Description));
+			})
+		})
+	}
+}
 }
 
