@@ -1,78 +1,93 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <!--<form id="frmUploader" [formGroup]="myform" enctype="multipart/form-data" method="post" (ngSubmit)="onSubmit()" novalidate>
-                <input type="file" name="snap" multiple />
-                <input type="submit" name="submit" id="btnSubmit" value="Upload" />
-            </form>-->
-            <form novalidate [formGroup]="myform" (ngSubmit)="onSubmit()">
+ <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Enter your Activity</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="container">
+			<div class="row">
+				<div class="col-md-8">
+					<!--<form id="frmUploader" [formGroup]="myform" enctype="multipart/form-data" method="post" (ngSubmit)="onSubmit()" novalidate>
+						<input type="file" name="snap" multiple />
+						<input type="submit" name="submit" id="btnSubmit" value="Upload" />
+					</form>-->
+					<form novalidate [formGroup]="myform" (ngSubmit)="onSubmit()">
 
-            <div class="form-group" [ngClass]="{
-                    'has-danger': Title.invalid && (Title.dirty || Title.touched),
-                    'has-success': Title.valid && (Title.dirty || Title.touched)
-                }">
-                <label>Title</label>
-                <input type="text" class="form-control" formControlName="Title" required>
-                <div class="form-control-feedback"
-                    *ngIf="Title.errors && (Title.dirty || Title.touched)">
-                <p *ngIf="Title.errors.required">Title is required</p>
-                </div>
+					<div class="form-group" [ngClass]="{
+							'has-danger': Title.invalid && (Title.dirty || Title.touched),
+							'has-success': Title.valid && (Title.dirty || Title.touched)
+						}">
+						<label>Title</label>
+						<input type="text" class="form-control" formControlName="Title" required>
+						<div class="form-control-feedback"
+							*ngIf="Title.errors && (Title.dirty || Title.touched)">
+						<p *ngIf="Title.errors.required">Title is required</p>
+						</div>
 
-                <!--
-                <pre>Valid? {{ myform.controls.email.valid }}</pre>
-                <pre>Dirty? {{ myform.controls.email.dirty }}</pre>
-                -->
+						<!--
+						<pre>Valid? {{ myform.controls.email.valid }}</pre>
+						<pre>Dirty? {{ myform.controls.email.dirty }}</pre>
+						-->
 
-            </div>
+					</div>
 
-            <div class="form-group" [ngClass]="{
-                    'has-danger': ActivityType.invalid && (ActivityType.dirty || ActivityType.touched),
-                    'has-success': ActivityType.valid && (ActivityType.dirty || ActivityType.touched)
-            }">
-                <label>ActivityType</label>
-                <select class="form-control" formControlName="ActivityType">
-                    <option value="">Please select a ActivityType</option>
-                    <option *ngFor="let type of aType" [value]="type">{{type}}</option>
-                </select>
-                <div class="form-control-feedback" *ngIf="ActivityType.errors && (ActivityType.dirty || ActivityType.touched)">
-                <p *ngIf="ActivityType.errors.required">ActivityType is required</p>
-                </div>
+					<div class="form-group" [ngClass]="{
+							'has-danger': ActivityType.invalid && (ActivityType.dirty || ActivityType.touched),
+							'has-success': ActivityType.valid && (ActivityType.dirty || ActivityType.touched)
+					}">
+						<label>ActivityType</label>
+						<select class="form-control" formControlName="ActivityType">
+							<option value="">Please select a ActivityType</option>
+							<option *ngFor="let type of aType" [value]="type">{{type}}</option>
+						</select>
+						<div class="form-control-feedback" *ngIf="ActivityType.errors && (ActivityType.dirty || ActivityType.touched)">
+						<p *ngIf="ActivityType.errors.required">ActivityType is required</p>
+						</div>
 
-                <!--
-                <pre>Valid? {{ myform.controls.file.valid }}</pre>
-                <pre>Dirty? {{ myform.controls.file.dirty }}</pre>
-                -->
+						<!--
+						<pre>Valid? {{ myform.controls.file.valid }}</pre>
+						<pre>Dirty? {{ myform.controls.file.dirty }}</pre>
+						-->
 
-            </div>
+					</div>
 
-            <div class="form-group" [ngClass]="{
-                    'has-danger': FileNames.invalid && (FileNames.dirty || FileNames.touched),
-                    'has-success': FileNames.valid && (FileNames.dirty || FileNames.touched)
-            }">
-                <label>Snap</label>
-                <input type="file" class="form-control" formControlName="FileNames" multiple  required (change)="getFileDetails($event)">
-                <div class="form-control-feedback" *ngIf="FileNames.errors && (FileNames.dirty || FileNames.touched)">
-                <p *ngIf="FileNames.errors.required">Snap is required</p>
-                </div>
-            </div>
+					<div class="form-group" [ngClass]="{
+							'has-danger': FileNames.invalid && (FileNames.dirty || FileNames.touched),
+							'has-success': FileNames.valid && (FileNames.dirty || FileNames.touched)
+					}">
+						<label>Snap</label>
+						<input type="file" class="form-control" formControlName="FileNames" multiple  required (change)="getFileDetails($event)">
+						<div class="form-control-feedback" *ngIf="FileNames.errors && (FileNames.dirty || FileNames.touched)">
+						<p *ngIf="FileNames.errors.required">Snap is required</p>
+						</div>
+					</div>
 
-            <!--
-                <pre>{{ language.errors | json }}</pre>
-            -->
+					<!--
+						<pre>{{ language.errors | json }}</pre>
+					-->
 
-            <div class="form-group"  [ngClass]="{
-                    'has-danger': Description.invalid && (Description.dirty || Description.touched),
-                    'has-success': Description.valid && (Description.dirty || Description.touched)
-                }">
-                <label>Description</label>
-                 <textarea class="form-control" formControlName="Description" required></textarea>
-            </div>
+					<div class="form-group"  [ngClass]="{
+							'has-danger': Description.invalid && (Description.dirty || Description.touched),
+							'has-success': Description.valid && (Description.dirty || Description.touched)
+						}">
+						<label>Description</label>
+						 <textarea class="form-control" formControlName="Description" required></textarea>
+					</div>
 
-            <button type="submit" class="btn btn-primary">Add</button>
+					
 
-            <pre>{{myform.value | json}}</pre>
-            </form>
-        </div>
-  </div>
- 
+					<!--<pre>{{myform.value | json}}</pre>-->
+					</form>
+				</div>
+          </div>
+          </div>
+		 
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </div>
   </div>

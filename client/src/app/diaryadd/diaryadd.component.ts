@@ -1,8 +1,7 @@
-
-import { Diary } from './diary.model'
 import { Component, OnInit, Compiler } from '@angular/core';
-import { ReactiveFormsModule, FormsModule, FormGroup, FormControl, Validators,FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CommonService } from '../common/common.service'
+import { Diary } from './diary.model'
 
 @Component({
     selector: 'diary-add',
@@ -91,6 +90,5 @@ export class DiaryAddComponent implements OnInit {
 			})
 		})
 	}
-}
 }
 

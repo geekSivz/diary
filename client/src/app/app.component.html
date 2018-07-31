@@ -13,7 +13,8 @@
       <nav>
         <ul class="nav nav-pills float-right">
           <li class="nav-item">
-            <a class="btn-floating btn-lg red waves-effect waves-light" data-toggle="modal" data-target="#modalContactForm">
+            <a class="btn-floating btn-lg teal waves-effect waves-light" data-toggle="modal" data-target="#basicExample" (click)="frame.show()"
+            mdbWavesEffect>
               <i class="fa fa-plus-circle white-text"></i>
               <span class="sr-only">(current)</span>
               </a>
@@ -23,7 +24,10 @@
       <h3 class="text-muted">Diary manager</h3>
     </div>
     <diary-list></diary-list>
+    <div mdbModal #frame="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
     <diary-add></diary-add>
+    </div>
   </div>
   <!-- /container -->
 </body>
